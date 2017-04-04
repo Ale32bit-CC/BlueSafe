@@ -1239,6 +1239,7 @@ while true do
 						return
 					elseif conf.get("conf","lockmode") == "redstone" then
 						term.setCursorPos(2,12)
+						term.clearLine()
 						term.setTextColor(theme.correct)
 						term.setBackgroundColor(theme.bg)
 						print("Correct!")
