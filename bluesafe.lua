@@ -1239,9 +1239,9 @@ while true do
 						return
 					elseif conf.get("conf","lockmode") == "redstone" then
 						term.setCursorPos(2,12)
+						term.setBackgroundColor(theme.bg)
 						term.clearLine()
 						term.setTextColor(theme.correct)
-						term.setBackgroundColor(theme.bg)
 						print("Correct!")
 						for k,v in pairs(conf.list("rssides")) do
 							rs.setOutput(k,v)
