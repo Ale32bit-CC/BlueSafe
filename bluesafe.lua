@@ -672,81 +672,7 @@ if not conf.get("accounts") then
 	local exit = false
 	local lockMode
 	conf.set("conf","salt",hash(tostring(os.time()+os.day())))
-	term.setBackgroundColor(theme.bg)
-	term.clear()
-	paintutils.drawLine(1,1,w,1,theme.hdbg)
-	term.setTextColor(theme.hdtext)
-	term.setBackgroundColor(theme.hdbg)
-	term.setCursorPos(2,1)
-	term.write("Setup")
-	right("BlueSafe")
-	term.setCursorPos(2,4)
-	term.setBackgroundColor(theme.bg)
-	term.setTextColor(theme.text)
-	print("Choose lock mode")
-	term.setTextColor(theme.inputtext)
-	paintutils.drawFilledBox(2,6,11,9,theme.input)
-	paintutils.drawFilledBox(14,6,23,9,theme.input)
-	term.setCursorPos(3,7)
-	write("Computer")
-	term.setCursorPos(5,8)
-	write("Lock")
-	
-	term.setCursorPos(15,7)
-	write("Redstone")
-	term.setCursorPos(17,8)
-	write("Lock")
-	while true do
-		local ev = {os.pullEvent()}
-		if ev[1] == "mouse_click" then
-			local x,y = ev[3],ev[4]
-			
-			if y >=6 and y <= 9 then
-				if x >=2 and x <=11 then
-					paintutils.drawFilledBox(2,6,11,9,theme.activeinput)
-					term.setTextColor(theme.activeinputtext)
-					term.setCursorPos(3,7)
-					write("Computer")
-					term.setCursorPos(5,8)
-					write("Lock")
-					paintutils.drawFilledBox(14,6,23,9,theme.input)
-					term.setTextColor(theme.inputtext)
-					term.setCursorPos(15,7)
-					write("Redstone")
-					term.setCursorPos(17,8)
-					write("Lock")
-					term.setBackgroundColor(theme.bg)
-					term.setTextColor(theme.text)
-					term.setCursorPos(w-12,h-1)
-					print("Continue >")
-					lockMode = "shell"
-				elseif x >= 14 and x <= 23 then
-					paintutils.drawFilledBox(2,6,11,9,theme.input)
-					term.setTextColor(theme.inputtext)
-					term.setCursorPos(3,7)
-					write("Computer")
-					term.setCursorPos(5,8)
-					write("Lock")
-					paintutils.drawFilledBox(14,6,23,9,theme.activeinput)
-					term.setTextColor(theme.activeinputtext)
-					term.setCursorPos(15,7)
-					write("Redstone")
-					term.setCursorPos(17,8)
-					write("Lock")
-					term.setBackgroundColor(theme.bg)
-					term.setTextColor(theme.text)
-					term.setCursorPos(w-12,h-1)
-					print("Continue >")
-					lockMode = "redstone"
-				end
-			elseif y == h-1 and x>=w-12 and x<=w-3 and lockMode then
-				break
-			end
-		end
-	end
-	if lockMode == "redstone" then
-		local sleepseconds = 2
-		local side
+	if not _G.pocket then
 		term.setBackgroundColor(theme.bg)
 		term.clear()
 		paintutils.drawLine(1,1,w,1,theme.hdbg)
@@ -758,209 +684,287 @@ if not conf.get("accounts") then
 		term.setCursorPos(2,4)
 		term.setBackgroundColor(theme.bg)
 		term.setTextColor(theme.text)
-		print("Select redstone sides")
-		term.setCursorPos(31,4)
-		print("Sleep time")
-		term.setCursorPos(37,7)
-		print("seconds")
-		
-		paintutils.drawFilledBox(31,7,35,7,theme.input)
-		
-		paintutils.drawFilledBox(10,7,16,9,theme.input) --top
-		paintutils.drawFilledBox(2,11,8,13,theme.input) --left
-		paintutils.drawFilledBox(10,11,16,13,theme.input) --front
-		paintutils.drawFilledBox(10,15,16,17,theme.input) --bottom
-		paintutils.drawFilledBox(18,11,24,13,theme.input) --right
-		paintutils.drawFilledBox(18,7,24,9,theme.input) -- back
+		print("Choose lock mode")
 		term.setTextColor(theme.inputtext)
+		paintutils.drawFilledBox(2,6,11,9,theme.input)
+		paintutils.drawFilledBox(14,6,23,9,theme.input)
+		term.setCursorPos(3,7)
+		write("Computer")
+		term.setCursorPos(5,8)
+		write("Lock")
 		
-		term.setCursorPos(12,8)
-		term.write("Top")
-		
-		term.setCursorPos(3,12)
-		term.write("Left")
-		
-		term.setCursorPos(11,12)
-		term.write("Front")
-		
-		term.setCursorPos(11,16)
-		term.write("Bottm")
-		
-		term.setCursorPos(19,12)
-		term.write("Right")
-		
-		term.setCursorPos(19,8)
-		term.write("Back")
-		
-		term.setCursorPos(31,7)
-		term.write(sleepseconds)
-		
-		local sides = {
-			front = false,
-			back = false,
-			top = false,
-			bottom = false,
-			right = false,
-			left = false,
-		}
-		
-		local sideset = false
-		
+		term.setCursorPos(15,7)
+		write("Redstone")
+		term.setCursorPos(17,8)
+		write("Lock")
 		while true do
 			local ev = {os.pullEvent()}
 			if ev[1] == "mouse_click" then
 				local x,y = ev[3],ev[4]
 				
-				
-				if (x>=10 and x<=16) and (y>=7 and y<=9) then --top
-					if sides["top"] then
-						sides["top"] = false
-						paintutils.drawFilledBox(10,7,16,9,theme.input)
-						term.setTextColor(theme.inputtext)
-						term.setCursorPos(12,8)
-						term.write("Top")
-					else
-						sides["top"] = true
-						paintutils.drawFilledBox(10,7,16,9,theme.activeinput)
+				if y >=6 and y <= 9 then
+					if x >=2 and x <=11 then
+						paintutils.drawFilledBox(2,6,11,9,theme.activeinput)
 						term.setTextColor(theme.activeinputtext)
-						term.setCursorPos(12,8)
-						term.write("Top")
-					end
-					
-					
-				elseif (x>=2 and x<=8) and (y>=11 and y<=13) then --left
-					if sides["left"] then
-						sides["left"] = false
-						paintutils.drawFilledBox(2,11,8,13,theme.input)
+						term.setCursorPos(3,7)
+						write("Computer")
+						term.setCursorPos(5,8)
+						write("Lock")
+						paintutils.drawFilledBox(14,6,23,9,theme.input)
 						term.setTextColor(theme.inputtext)
-						term.setCursorPos(3,12)
-						term.write("Left")
-					else
-						sides["left"] = true
-						paintutils.drawFilledBox(2,11,8,13,theme.activeinput)
-						term.setTextColor(theme.activeinputtext)
-						term.setCursorPos(3,12)
-						term.write("Left")
-					end
-					
-					
-				elseif (x>=10 and x<=16) and (y>=11 and y<=13) then --front
-					if sides["front"] then
-						sides["front"] = false
-						paintutils.drawFilledBox(10,11,16,13,theme.input)
+						term.setCursorPos(15,7)
+						write("Redstone")
+						term.setCursorPos(17,8)
+						write("Lock")
+						term.setBackgroundColor(theme.bg)
+						term.setTextColor(theme.text)
+						term.setCursorPos(w-12,h-1)
+						print("Continue >")
+						lockMode = "shell"
+					elseif x >= 14 and x <= 23 then
+						paintutils.drawFilledBox(2,6,11,9,theme.input)
 						term.setTextColor(theme.inputtext)
-						term.setCursorPos(11,12)
-						term.write("Front")
-					else
-						sides["front"] = true
-						paintutils.drawFilledBox(10,11,16,13,theme.activeinput)
+						term.setCursorPos(3,7)
+						write("Computer")
+						term.setCursorPos(5,8)
+						write("Lock")
+						paintutils.drawFilledBox(14,6,23,9,theme.activeinput)
 						term.setTextColor(theme.activeinputtext)
-						term.setCursorPos(11,12)
-						term.write("Front")
+						term.setCursorPos(15,7)
+						write("Redstone")
+						term.setCursorPos(17,8)
+						write("Lock")
+						term.setBackgroundColor(theme.bg)
+						term.setTextColor(theme.text)
+						term.setCursorPos(w-12,h-1)
+						print("Continue >")
+						lockMode = "redstone"
 					end
-					
-					
-				elseif (x>=10 and x<=16) and (y>=15 and y<=17) then --bottom
-					if sides["bottom"] then
-						sides["bottom"] = false
-						paintutils.drawFilledBox(10,15,16,17,theme.input)
-						term.setTextColor(theme.inputtext)
-						term.setCursorPos(11,16)
-						term.write("Bottm")
-					else
-						sides["bottom"] = true
-						paintutils.drawFilledBox(10,15,16,17,theme.activeinput)
-						term.setTextColor(theme.activeinputtext)
-						term.setCursorPos(11,16)
-						term.write("Bottm")
-					end
-					
-					
-				elseif (x>=18 and x<=24) and (y>=11 and y<=13) then --right
-					if sides["right"] then
-						sides["right"] = false
-						paintutils.drawFilledBox(18,11,24,13,theme.input)
-						term.setTextColor(theme.inputtext)
-						term.setCursorPos(19,12)
-						term.write("Right")
-					else
-						sides["right"] = true
-						paintutils.drawFilledBox(18,11,24,13,theme.activeinput)
-						term.setTextColor(theme.activeinputtext)
-						term.setCursorPos(19,12)
-						term.write("Right")
-					end
-					
-					
-				elseif (x>=18 and x<=24) and (y>=7 and y<=9) then --back
-					if sides["back"] then
-						sides["back"] = false
-						paintutils.drawFilledBox(18,7,24,9,theme.input)
-						term.setTextColor(theme.inputtext)
-						term.setCursorPos(19,8)
-						term.write("Back")
-					else
-						sides["back"] = true
-						paintutils.drawFilledBox(18,7,24,9,theme.activeinput)
-						term.setTextColor(theme.activeinputtext)
-						term.setCursorPos(19,8)
-						term.write("Back")
-					end
-				
-				
-				elseif y == 7 and (x>=31 and x<=35) then
-					local curr = term.current()
-					local inp = window.create(term.current(), 31,7,5,1,true)
-					term.redirect(inp)
-					term.setBackgroundColor(theme.activeinput)
-					term.setTextColor(theme.activeinputtext)
-					term.clear()
-					term.setCursorPos(1,1)
-					sleepseconds, mouse, mx,my = read(nil,nil,nil,true,tostring(sleepseconds),true)
-					sleepseconds = tostring(sleepseconds)
-					term.setBackgroundColor(theme.input)
-					term.setTextColor(theme.inputtext)
-					term.clear()
-					term.setCursorPos(1,1)
-					term.write(sleepseconds)
-					term.redirect(curr)
-					sleepseconds = tonumber(sleepseconds)
-					
-					if mouse then
-						os.queueEvent("mouse_click",1,mx,my)
-					end
-				elseif y == h-1 and x>=w-12 and x<=w-3 and sideset then
-					for k,v in pairs(sides) do
-						conf.set("rssides",k,v)
-					end
-					conf.set("conf","lockmode","redstone")
-					conf.set("conf","sleep",tonumber(sleepseconds) or 2)
+				elseif y == h-1 and x>=w-12 and x<=w-3 and lockMode then
 					break
 				end
 			end
-			local ss
-			for k,v in pairs(sides) do
-				if v then
-					ss = true
+		end
+		if lockMode == "redstone" then
+			local sleepseconds = 2
+			local side
+			term.setBackgroundColor(theme.bg)
+			term.clear()
+			paintutils.drawLine(1,1,w,1,theme.hdbg)
+			term.setTextColor(theme.hdtext)
+			term.setBackgroundColor(theme.hdbg)
+			term.setCursorPos(2,1)
+			term.write("Setup")
+			right("BlueSafe")
+			term.setCursorPos(2,4)
+			term.setBackgroundColor(theme.bg)
+			term.setTextColor(theme.text)
+			print("Select redstone sides")
+			term.setCursorPos(31,4)
+			print("Sleep time")
+			term.setCursorPos(37,7)
+			print("seconds")
+			
+			paintutils.drawFilledBox(31,7,35,7,theme.input)
+			
+			paintutils.drawFilledBox(10,7,16,9,theme.input) --top
+			paintutils.drawFilledBox(2,11,8,13,theme.input) --left
+			paintutils.drawFilledBox(10,11,16,13,theme.input) --front
+			paintutils.drawFilledBox(10,15,16,17,theme.input) --bottom
+			paintutils.drawFilledBox(18,11,24,13,theme.input) --right
+			paintutils.drawFilledBox(18,7,24,9,theme.input) -- back
+			term.setTextColor(theme.inputtext)
+			
+			term.setCursorPos(12,8)
+			term.write("Top")
+			
+			term.setCursorPos(3,12)
+			term.write("Left")
+			
+			term.setCursorPos(11,12)
+			term.write("Front")
+			
+			term.setCursorPos(11,16)
+			term.write("Bottm")
+			
+			term.setCursorPos(19,12)
+			term.write("Right")
+			
+			term.setCursorPos(19,8)
+			term.write("Back")
+			
+			term.setCursorPos(31,7)
+			term.write(sleepseconds)
+			
+			local sides = {
+				front = false,
+				back = false,
+				top = false,
+				bottom = false,
+				right = false,
+				left = false,
+			}
+			
+			local sideset = false
+			
+			while true do
+				local ev = {os.pullEvent()}
+				if ev[1] == "mouse_click" then
+					local x,y = ev[3],ev[4]
+					
+					
+					if (x>=10 and x<=16) and (y>=7 and y<=9) then --top
+						if sides["top"] then
+							sides["top"] = false
+							paintutils.drawFilledBox(10,7,16,9,theme.input)
+							term.setTextColor(theme.inputtext)
+							term.setCursorPos(12,8)
+							term.write("Top")
+						else
+							sides["top"] = true
+							paintutils.drawFilledBox(10,7,16,9,theme.activeinput)
+							term.setTextColor(theme.activeinputtext)
+							term.setCursorPos(12,8)
+							term.write("Top")
+						end
+						
+						
+					elseif (x>=2 and x<=8) and (y>=11 and y<=13) then --left
+						if sides["left"] then
+							sides["left"] = false
+							paintutils.drawFilledBox(2,11,8,13,theme.input)
+							term.setTextColor(theme.inputtext)
+							term.setCursorPos(3,12)
+							term.write("Left")
+						else
+							sides["left"] = true
+							paintutils.drawFilledBox(2,11,8,13,theme.activeinput)
+							term.setTextColor(theme.activeinputtext)
+							term.setCursorPos(3,12)
+							term.write("Left")
+						end
+						
+						
+					elseif (x>=10 and x<=16) and (y>=11 and y<=13) then --front
+						if sides["front"] then
+							sides["front"] = false
+							paintutils.drawFilledBox(10,11,16,13,theme.input)
+							term.setTextColor(theme.inputtext)
+							term.setCursorPos(11,12)
+							term.write("Front")
+						else
+							sides["front"] = true
+							paintutils.drawFilledBox(10,11,16,13,theme.activeinput)
+							term.setTextColor(theme.activeinputtext)
+							term.setCursorPos(11,12)
+							term.write("Front")
+						end
+						
+						
+					elseif (x>=10 and x<=16) and (y>=15 and y<=17) then --bottom
+						if sides["bottom"] then
+							sides["bottom"] = false
+							paintutils.drawFilledBox(10,15,16,17,theme.input)
+							term.setTextColor(theme.inputtext)
+							term.setCursorPos(11,16)
+							term.write("Bottm")
+						else
+							sides["bottom"] = true
+							paintutils.drawFilledBox(10,15,16,17,theme.activeinput)
+							term.setTextColor(theme.activeinputtext)
+							term.setCursorPos(11,16)
+							term.write("Bottm")
+						end
+						
+						
+					elseif (x>=18 and x<=24) and (y>=11 and y<=13) then --right
+						if sides["right"] then
+							sides["right"] = false
+							paintutils.drawFilledBox(18,11,24,13,theme.input)
+							term.setTextColor(theme.inputtext)
+							term.setCursorPos(19,12)
+							term.write("Right")
+						else
+							sides["right"] = true
+							paintutils.drawFilledBox(18,11,24,13,theme.activeinput)
+							term.setTextColor(theme.activeinputtext)
+							term.setCursorPos(19,12)
+							term.write("Right")
+						end
+						
+						
+					elseif (x>=18 and x<=24) and (y>=7 and y<=9) then --back
+						if sides["back"] then
+							sides["back"] = false
+							paintutils.drawFilledBox(18,7,24,9,theme.input)
+							term.setTextColor(theme.inputtext)
+							term.setCursorPos(19,8)
+							term.write("Back")
+						else
+							sides["back"] = true
+							paintutils.drawFilledBox(18,7,24,9,theme.activeinput)
+							term.setTextColor(theme.activeinputtext)
+							term.setCursorPos(19,8)
+							term.write("Back")
+						end
+					
+					
+					elseif y == 7 and (x>=31 and x<=35) then
+						local curr = term.current()
+						local inp = window.create(term.current(), 31,7,5,1,true)
+						term.redirect(inp)
+						term.setBackgroundColor(theme.activeinput)
+						term.setTextColor(theme.activeinputtext)
+						term.clear()
+						term.setCursorPos(1,1)
+						sleepseconds, mouse, mx,my = read(nil,nil,nil,true,tostring(sleepseconds),true)
+						sleepseconds = tostring(sleepseconds)
+						term.setBackgroundColor(theme.input)
+						term.setTextColor(theme.inputtext)
+						term.clear()
+						term.setCursorPos(1,1)
+						term.write(sleepseconds)
+						term.redirect(curr)
+						sleepseconds = tonumber(sleepseconds)
+						
+						if mouse then
+							os.queueEvent("mouse_click",1,mx,my)
+						end
+					elseif y == h-1 and x>=w-12 and x<=w-3 and sideset then
+						for k,v in pairs(sides) do
+							conf.set("rssides",k,v)
+						end
+						conf.set("conf","lockmode","redstone")
+						conf.set("conf","sleep",tonumber(sleepseconds) or 2)
+						break
+					end
+				end
+				local ss
+				for k,v in pairs(sides) do
+					if v then
+						ss = true
+					end
+				end
+				if ss then
+					sideset = true
+				else
+					sideset = false
+				end
+				ss = false
+				
+				if sideset then
+					term.setBackgroundColor(theme.bg)
+					term.setTextColor(theme.text)
+					term.setCursorPos(w-12,h-1)
+					print("Continue >")
+				else
+					term.setCursorPos(1,h-1)
+					term.setBackgroundColor(theme.bg)
+					term.clearLine()
 				end
 			end
-			if ss then
-				sideset = true
-			else
-				sideset = false
-			end
-			ss = false
-			
-			if sideset then
-				term.setBackgroundColor(theme.bg)
-				term.setTextColor(theme.text)
-				term.setCursorPos(w-12,h-1)
-				print("Continue >")
-			else
-				term.setCursorPos(1,h-1)
-				term.setBackgroundColor(theme.bg)
-				term.clearLine()
-			end
+		else
+			conf.set("conf","lockmode","shell")
 		end
 	else
 		conf.set("conf","lockmode","shell")
