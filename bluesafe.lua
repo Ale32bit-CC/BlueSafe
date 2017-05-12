@@ -24,6 +24,11 @@ SOFTWARE.
 
 local args = {...}
 
+if not term.isColor() then
+	print("Classic computers not supported (yet)")
+	return
+end
+
 -- SHA256
 local MOD = 2^32
 local MODM = MOD-1
@@ -644,6 +649,7 @@ if term.isColor() then
 	theme.yes = colors.lime
 	theme.no = colors.red
 	theme.btntext = colors.white
+	theme.red = colors.red
 else
 	theme.bg = colors.white
 	theme.text = colors.black
@@ -658,6 +664,7 @@ else
 	theme.yes = colors.lightGray
 	theme.no = colors.gray
 	theme.btntext = colors.white
+	theme.red = colors.lightGray
 end
 
 local oldPull = os.pullEvent
@@ -673,6 +680,17 @@ if not conf.get("accounts") then
 	local lockMode
 	conf.set("conf","salt",hash(tostring(os.time()+os.day())))
 	if not _G.pocket then
+		local info = window.create(term.current(),27,4,24,14,true)
+		local function printInfo(...)
+			local old = term.current()
+			term.redirect(info)
+			term.setBackgroundColor(theme.bg)
+			term.setTextColor(theme.text)
+			term.clear()
+			term.setCursorPos(1,1)
+			print(...)
+			term.redirect(old)
+		end
 		term.setBackgroundColor(theme.bg)
 		term.clear()
 		paintutils.drawLine(1,1,w,1,theme.hdbg)
@@ -697,6 +715,15 @@ if not conf.get("accounts") then
 		write("Redstone")
 		term.setCursorPos(17,8)
 		write("Lock")
+		
+		term.setBackgroundColor(theme.bg)
+		term.setCursorPos(2,h-1)
+		term.setBackgroundColor(theme.red)
+		term.setTextColor(theme.hdtext)
+		write(" Exit ")
+		
+		printInfo("Welcome to BlueSafe!\n\nSelect \"Computer Lock\" to safe your computer.\n\nSelect \"Redstone Lock\" to send redstone signal.\n\nCreated by Ale32bit\n\nCopyright (c) Ale32bit\nMIT License")
+		
 		while true do
 			local ev = {os.pullEvent()}
 			if ev[1] == "mouse_click" then
@@ -716,6 +743,9 @@ if not conf.get("accounts") then
 						write("Redstone")
 						term.setCursorPos(17,8)
 						write("Lock")
+						
+						printInfo("Protect your computer by logging in using your credentials.")
+						
 						term.setBackgroundColor(theme.bg)
 						term.setTextColor(theme.text)
 						term.setCursorPos(w-12,h-1)
@@ -734,6 +764,9 @@ if not conf.get("accounts") then
 						write("Redstone")
 						term.setCursorPos(17,8)
 						write("Lock")
+						
+						printInfo("Send redstone signal for n seconds using your credentials.")
+						
 						term.setBackgroundColor(theme.bg)
 						term.setTextColor(theme.text)
 						term.setCursorPos(w-12,h-1)
@@ -742,6 +775,13 @@ if not conf.get("accounts") then
 					end
 				elseif y == h-1 and x>=w-12 and x<=w-3 and lockMode then
 					break
+				elseif y == h-1 and x>= 2 and x<=7 then
+					term.setBackgroundColor(colors.black)
+					term.setTextColor(colors.white)
+					term.clear()
+					term.setCursorPos(1,1)
+					print("BlueSafe setup canceled.")
+					return
 				end
 			end
 		end
